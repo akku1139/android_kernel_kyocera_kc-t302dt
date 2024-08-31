@@ -148,7 +148,7 @@
 		qcom,gpio-req-tbl-label = "CAMIF_MCLK1",
 			"CAM_RESET1",
 			"CAM_VANA";
-		qcom,sensor-position = <0>;
+		qcom,sensor-position = <1>;
 		qcom,sensor-mode = <0>;
 		qcom,cci-master = <0>;
 		status = "ok";
