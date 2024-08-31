@@ -335,6 +335,7 @@ struct himax_ts_data {
 	struct himax_i2c_platform_data *pdata;
 	struct himax_virtual_key *button;
 	struct mutex rw_lock;
+	struct mutex suspend_lock;
 
 /******* SPI-start *******/
 	struct mutex	spi_lock;

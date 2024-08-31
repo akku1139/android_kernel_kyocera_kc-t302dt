@@ -279,19 +279,19 @@ static void mdss_dsi_panel_bklt_dcs(struct mdss_dsi_ctrl_pdata *ctrl, int level)
 	}
 
 	pr_debug("%s: level=%d\n", __func__, level);
-	if(pf_sstype == PF_SSTYPE_HINOKI01){
+	if ((pf_sstype == PF_SSTYPE_HINOKI01) || (kdisp_connect_get_panel_detect() == PANEL_FOUND2)) {
 		led_pwm2[1] = (unsigned char)((level & 0x0f00)>>8);
 		led_pwm2[2] = (unsigned char)(level & 0xff);
 	}
 	else
 		led_pwm1[1] = (unsigned char)level;
 	memset(&cmdreq, 0, sizeof(cmdreq));
-	if(pf_sstype == PF_SSTYPE_HINOKI01)
+	if ((pf_sstype == PF_SSTYPE_HINOKI01) || (kdisp_connect_get_panel_detect() == PANEL_FOUND2))
 		cmdreq.cmds = &backlight_cmd2;
 	else
 		cmdreq.cmds = &backlight_cmd;
 	cmdreq.cmds_cnt = 1;
-	if(pf_sstype == PF_SSTYPE_HINOKI01)
+	if ((pf_sstype == PF_SSTYPE_HINOKI01) || (kdisp_connect_get_panel_detect() == PANEL_FOUND2))
 		cmdreq.flags = CMD_REQ_COMMIT | CMD_CLK_CTRL;
 	else
 		cmdreq.flags = CMD_REQ_COMMIT;
