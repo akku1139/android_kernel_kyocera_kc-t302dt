@@ -1,0 +1,48 @@
+/*
+ * This software is contributed or developed by KYOCERA Corporation.
+ * (C) 2019 KYOCERA Corporation
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+&pmi632_qg {
+	qcom,qg-iterm-ma = <150>;
+	qcom,hold-soc-while-full;
+	qcom,linearize-soc;
+	qcom,cl-feedback-on;
+	qcom,cl-max-increment = <5>;
+	qcom,cl-max-decrement = <100>;
+	qcom,cl-max-temp = <420>;
+	qcom,cl-min-temp = <150>;
+	qcom,cl-max-limit = <0>;
+	qcom,cl-min-limit = <0>;
+	qcom,cl-max-start-soc = <40>;
+	qcom,cl-min-start-soc = <0>;
+	qcom,delta-soc = <1>;
+};
+
+&pmi632_vadc{
+	/delete-node/ chan@2a;
+	chan@2a {
+			label = "bat_therm_PU30_B3380";
+			reg = <0x2a>;
+			qcom,decimation = <2>;
+			qcom,pre-div-channel-scaling = <0>;
+			qcom,calibration-type = "ratiometric";
+			qcom,scale-function = <26>;
+			qcom,hw-settle-time = <0>;
+			qcom,fast-avg-setup = <0>;
+			qcom,cal-val = <0>;
+	};
+};
+
+&pmi632_low_soc {
+	temperature = <(-1)>;
+};

@@ -1,0 +1,9 @@
+# This software is contributed or developed by KYOCERA Corporation.
+# (C) 2019 KYOCERA Corporation
+#
+
+source "drivers/power/avs/Kconfig"
+source "drivers/power/reset/Kconfig"
+source "drivers/power/supply/Kconfig"
+source "drivers/power/qcom/Kconfig"
+source "drivers/power/oem/Kconfig"

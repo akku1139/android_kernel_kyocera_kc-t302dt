@@ -1,0 +1,20 @@
+/*
+ * This software is contributed or developed by KYOCERA Corporation.
+ * (C) 2019 KYOCERA Corporation
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+#include "./module/flashdriver/emmc/sdm429-HINOKI-common-emmc.dtsi"
+#include "./module/flashdriver/sd/sdm429-HINOKI-common-sd.dtsi"
+#include "./module/thermal/sdm429-HINOKI-common-thermal.dtsi"
+#include "./module/ext_img/sdm429-HINOKI-common-ext-img.dtsi"
+#include "./module/audio/sdm429-HINOKI-common-audio.dtsi"
+#include "./module/systemupdate/sdm429-HINOKI-common-systemupdate.dtsi"

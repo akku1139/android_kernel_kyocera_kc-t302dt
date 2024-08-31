@@ -1,0 +1,56 @@
+/*
+ * Copyright (c) 2018, The Linux Foundation. All rights reserved.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+/*
+ * This software is contributed or developed by KYOCERA Corporation.
+ * (C) 2019 KYOCERA Corporation
+ */
+
+#include "msm8937-mdss-panels.dtsi"
+/*
+&pm8953_gpios {
+	bklt_en {
+		bklt_en_default: bklt_en_default {
+		pins = "gpio4";
+		function = "normal";
+		power-source = <0>;
+		output-high;
+		};
+	};
+};
+
+&pm8953_pwm {
+	status = "ok";
+};*/
+
+&mdss_mdp {
+	qcom,mdss-pref-prim-intf = "dsi";
+};
+
+&mdss_dsi {
+	hw-config = "single_dsi";
+};
+
+&mdss_dsi0 {
+	pinctrl-names = "mdss_default", "mdss_sleep";
+	pinctrl-0 = <&mdss_dsi_active &mdss_te_active>;
+	pinctrl-1 = <&mdss_te_suspend>;
+	qcom,platform-te-gpio = <&tlmm 24 0>;
+	lab-supply = <&lcdb_ldo_vreg>;
+	ibb-supply = <&lcdb_ncp_vreg>;
+};
+
+&mdss_dsi1 {
+	/delete-property/ vdd-supply;
+	/delete-property/ vddio-supply;
+	status = "disabled";
+};

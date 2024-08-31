@@ -1,0 +1,34 @@
+/*
+ * This software is contributed or developed by KYOCERA Corporation.
+ * (C) 2018 KYOCERA Corporation
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+/*
+ * This software is contributed or developed by KYOCERA Corporation.
+ * (C) 2019 KYOCERA Corporation
+ */
+
+&i2c_3 { /* BLSP1 QUP3 (TOUCH) */
+	status = "okay";
+	 himax-ts@48 {
+		 compatible= "himax,hxcommon";
+		 reg = <0x48>;
+		 interrupt-parent = <&tlmm>;
+		 interrupts= <65 0x2008>;
+		 himax,panel-coords = <0 720 0 1440>;
+		 himax,display-coords = <0 720 0 1440>;
+		 himax,irq-gpio = <&tlmm 65 0x2008>;
+		 himax,rst-gpio = <&tlmm 64 0x00>;
+		 himax,fw-gpio = <&tlmm 13 0x00>;
+		 report_type = <1>;
+		 vdd1-supply = <&vdd1_1V8>;
+	 };
+};

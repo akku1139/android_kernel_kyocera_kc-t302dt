@@ -1,0 +1,175 @@
+/*
+ * This software is contributed or developed by KYOCERA Corporation.
+ * (C) 2018 KYOCERA Corporation
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+&i2c_3 {
+	status = "ok";
+
+	clock-frequency = <400000>;
+
+	tsc@24 {
+		compatible = "cy,cyttsp5_i2c_adapter";
+		reg = <0x24>;
+		interrupt-parent = <&tlmm>;
+		interrupts = <65 0x2008>;
+		cy,adapter_id = "cyttsp5_i2c_adapter";
+
+		pinctrl-names = "pmx_ts_active","pmx_ts_suspend";
+		pinctrl-0 = <&tp_int_n_active>;
+		pinctrl-1 = <&tp_int_n_suspend>;
+
+		cy,core {
+			cy,name = "cyttsp5_core";
+
+			cy,irq_gpio = <&tlmm 65 0x2008>;
+			cy,rst_gpio = <&tlmm 64 0x0>;
+			cy,ldo_gpio = <&tlmm 40 0x0>;
+
+			cy,hid_desc_register = <1>;
+			cy,flags = <5>;
+			cy,easy_wakeup_gesture = <0>;
+			cy,glove_valid = <0>;
+
+			cy,mt {
+				cy,name = "cyttsp5_mt";
+				cy,inp_dev_name = "cyttsp5_mt";
+				cy,flags = <0x80>;
+				cy,abs =
+					<0x35 0 800 0 0
+					0x36 0 1280 0 0
+					0x3a 0 250 0 0
+					0xffff 0 255 0 0
+					0x39 0 15 0 0
+					0x30 0 20 0 0
+					0x31 0 20 0 0
+					0x34 0xffffff81 127 0 0
+					0x19 0 255 0 0>;
+			};
+		};
+	};
+};
+
+&tlmm {
+	tp_int_n {
+		tp_int_n_default: tp_int_n_default {
+			mux {
+				pins = "gpio65";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio65";
+				drive-strength = <2>;
+				bias-pull-up;
+			};
+		};
+		tp_int_n_active: tp_int_n_active {
+			mux {
+				pins = "gpio65";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio65";
+				drive-strength = <2>;
+				bias-pull-up;
+			};
+		};
+		tp_int_n_suspend: tp_int_n_suspend {
+			mux {
+				pins = "gpio65";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio65";
+				drive-strength = <2>;
+				bias-pull-down;
+			};
+		};
+	};
+
+	tp_rst_n {
+		tp_rst_n_default: tp_rst_n_default {
+			mux {
+				pins = "gpio64";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio64";
+				drive-strength = <2>;
+				bias-disable;
+				output-low;
+			};
+		};
+		tp_rst_n_active: tp_rst_n_active {
+			mux {
+				pins = "gpio64";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio64";
+				drive-strength = <2>;
+				bias-disable;
+				output-high;
+			};
+		};
+		tp_rst_n_suspend: tp_rst_n_suspend {
+			mux {
+				pins = "gpio64";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio64";
+				drive-strength = <2>;
+				bias-disable;
+				output-high;
+			};
+		};
+	};
+	vtp_en {
+		vtp_en_default: vtp_en_default {
+			mux {
+				pins = "gpio40";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio40";
+				drive-strength = <2>;
+				bias-disable;
+				output-low;
+			};
+		};
+		vtp_en_active: vtp_en_active {
+			mux {
+				pins = "gpio40";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio40";
+				drive-strength = <2>;
+				bias-disable;
+				output-high;
+			};
+		};
+		vtp_en_suspend: vtp_en_suspend {
+			mux {
+				pins = "gpio40";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio40";
+				drive-strength = <2>;
+				bias-disable;
+				output-high;
+			};
+		};
+	};
+};

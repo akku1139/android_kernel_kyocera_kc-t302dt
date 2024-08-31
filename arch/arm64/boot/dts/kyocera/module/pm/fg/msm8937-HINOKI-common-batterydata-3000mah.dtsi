@@ -1,0 +1,63 @@
+/*
+ * This software is contributed or developed by KYOCERA Corporation.
+ * (C) 2019 KYOCERA Corporation
+*/
+/* Copyright (c) 2014-2015, The Linux Foundation. All rights reserved.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+qcom,msm8937-HINOKI-batterydata {
+	qcom,max-voltage-uv = <4200000>;
+	qcom,nom-batt-capacity-mah = <2550>;
+	qcom,batt-id-kohm = <100>;
+	qcom,battery-beta = <4250>;
+	qcom,battery-type = "msm8937-HINOKI-batterydata-3000mA";
+	qcom,chg-rslow-comp-c1 = <2968132>;
+	qcom,chg-rslow-comp-c2 = <5721421>;
+	qcom,chg-rs-to-rslow = <398558>;
+	qcom,chg-rslow-comp-thr = <0xBE>;
+	qcom,checksum = <0x9114>;
+	qcom,gui-version = "PMI8950GUI - 2.0.0.16";
+	qcom,fg-profile-data = [
+		 7A 88 15 86
+		 49 88 3C 7E
+		 3F 83 87 71
+		 A4 7C 5A 78
+		 06 82 30 9A
+		 F3 BC 67 C9
+		 AF 13 27 88
+		 3E 7F AA 81
+		 0B 7C 38 83
+		 67 78 B9 84
+		 28 80 2D 82
+		 AD 99 B4 BC
+		 65 C9 8F 12
+		 26 0A FD 5A
+		 FB 6A 52 F8
+		 B3 34 36 44
+		 FE 19 00 00
+		 A6 47 02 2F
+		 AA 42 00 00
+		 00 00 00 00
+		 00 00 00 00
+		 1E 69 3F 69
+		 74 6B 7B 92
+		 BC 77 89 70
+		 D2 84 E4 6B
+		 9E 76 A8 6A
+		 58 64 89 A0
+		 29 46 59 49
+		 4C A0 71 0C
+		 28 00 FF 36
+		 F0 11 30 03
+		 00 00 00 0C
+	];
+};

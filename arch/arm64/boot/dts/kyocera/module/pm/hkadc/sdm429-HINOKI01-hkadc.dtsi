@@ -1,0 +1,225 @@
+/*
+ * This software is contributed or developed by KYOCERA Corporation.
+ * (C) 2019 KYOCERA Corporation
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+&pm8953_vadc {
+	pinctrl-0 = <&incam_therm_default &lcd_therm_default>;
+
+	/delete-node/ chan@11;
+	chan@11 {
+		label = "incam_therm";
+		reg = <0x11>;
+		qcom,decimation = <0>;
+		qcom,pre-div-channel-scaling = <0>;
+		qcom,calibration-type = "ratiometric";
+		qcom,scale-function = <15>;
+		qcom,hw-settle-time = <2>;
+		qcom,fast-avg-setup = <0>;
+		qcom,vadc-thermal-node;
+	};
+
+	/delete-node/ chan@13;
+	chan@13 {
+		label = "lcd_therm";
+		reg = <0x13>;
+		qcom,decimation = <0>;
+		qcom,pre-div-channel-scaling = <0>;
+		qcom,calibration-type = "ratiometric";
+		qcom,scale-function = <15>;
+		qcom,hw-settle-time = <2>;
+		qcom,fast-avg-setup = <0>;
+		qcom,vadc-thermal-node;
+	};
+
+	/delete-node/ chan@32;
+	chan@32 {
+		label = "xo_therm";
+		reg = <0x32>;
+		qcom,decimation = <0>;
+		qcom,pre-div-channel-scaling = <0>;
+		qcom,calibration-type = "ratiometric";
+		qcom,scale-function = <4>;
+		qcom,hw-settle-time = <2>;
+		qcom,fast-avg-setup = <0>;
+		qcom,vadc-thermal-node;
+	};
+
+	/delete-node/ chan@36;
+	chan@36 {
+		label = "pa_therm";
+		reg = <0x36>;
+		qcom,decimation = <0>;
+		qcom,pre-div-channel-scaling = <0>;
+		qcom,calibration-type = "ratiometric";
+		qcom,scale-function = <2>;
+		qcom,hw-settle-time = <2>;
+		qcom,fast-avg-setup = <0>;
+		qcom,vadc-thermal-node;
+	};
+};
+
+&pm8953_mpps {
+	incam_therm {
+		incam_therm_default: incam_therm_default {
+			pins = "mpp2";
+			function = "analog";
+			input-enable;
+			qcom,amux-route = <1>;
+		};
+	};
+
+	lcd_therm {
+		lcd_therm_default: lcd_therm_default {
+			pins = "mpp4";
+			function = "analog";
+			input-enable;
+			qcom,amux-route = <3>;
+		};
+	};
+};
+
+&pmi632_vadc {
+	pinctrl-0 = <&typec_therm_default &out_cam_therm_default>;
+
+	/delete-node/ chan@54;
+	chan@54 {
+		label = "outcam_therm";
+		reg = <0x54>;
+		qcom,decimation = <2>;
+		qcom,pre-div-channel-scaling = <0>;
+		qcom,calibration-type = "ratiometric";
+		qcom,scale-function = <2>;
+		qcom,hw-settle-time = <0>;
+		qcom,fast-avg-setup = <0>;
+		qcom,cal-val = <0>;
+	};
+};
+
+&pmi632_adc_tm {
+	/delete-node/ chan@54;
+	chan@54 {
+		label = "outcam_therm";
+		reg = <0x54>;
+		qcom,pre-div-channel-scaling = <0>;
+		qcom,calibration-type = "ratiometric";
+		qcom,scale-function = <2>;
+		qcom,hw-settle-time = <0>;
+		qcom,btm-channel-number = <0x68>;
+		qcom,thermal-node;
+	};
+};
+
+&pmi632_gpios {
+	outcam_therm {
+		out_cam_therm_default: out_cam_therm_default {
+			pins = "gpio4";
+			bias-high-impedance;
+		};
+	};
+};
+
+&thermal_zones {
+	incam-therm-buf-adc {
+		polling-delay-passive = <0>;
+		polling-delay = <5000>;
+		thermal-sensors = <&pm8953_vadc 0x11>;
+		thermal-governor = "user_space";
+
+		trips {
+			active-config0 {
+				temperature = <65000>;
+				hysteresis = <1000>;
+				type = "passive";
+			};
+		};
+	};
+
+	lcd-therm-buf-adc {
+		polling-delay-passive = <0>;
+		polling-delay = <5000>;
+		thermal-sensors = <&pm8953_vadc 0x13>;
+		thermal-governor = "user_space";
+
+		trips {
+			active-config0 {
+				temperature = <65000>;
+				hysteresis = <1000>;
+				type = "passive";
+			};
+		};
+	};
+
+	xo-therm-adc {
+		polling-delay-passive = <0>;
+		polling-delay = <5000>;
+		thermal-sensors = <&pm8953_vadc 0x32>;
+		thermal-governor = "user_space";
+
+		trips {
+			active-config0 {
+				temperature = <65000>;
+				hysteresis = <1000>;
+				type = "passive";
+			};
+		};
+	};
+
+	pa-therm-buf-adc {
+		polling-delay-passive = <0>;
+		polling-delay = <5000>;
+		thermal-sensors = <&pm8953_vadc 0x36>;
+		thermal-governor = "user_space";
+
+		trips {
+			active-config0 {
+				temperature = <65000>;
+				hysteresis = <1000>;
+				type = "passive";
+			};
+		};
+	};
+
+	outcam-therm-adc {
+		polling-delay-passive = <0>;
+		polling-delay = <5000>;
+		thermal-sensors = <&pmi632_adc_tm 0x54>;
+		thermal-governor = "user_space";
+
+		trips {
+			active-config0 {
+				temperature = <65000>;
+				hysteresis = <1000>;
+				type = "passive";
+			};
+		};
+	};
+};
+
+&spmi_bus {
+	qcom,pm8953@0 {
+		oem_hkadc {
+			compatible = "oem_hkadc-driver";
+			qcom,oem-hkadc-vadc = <&pm8953_vadc>;
+			qcom,oem-pmi-hkadc-vadc = <&pmi632_vadc>;
+			oem,monitor-time-ms = <5000>;
+			oem,resume-mon-time-ms = <1000>;
+			oem,camera-therm-diasble;
+			oem,usb-therm-det-enable;
+		};
+
+		oem_hkadc_usb_tm_monitor {
+			compatible = "kc,oem_hkadc_usb_tm_det-driver";
+			oem_hkadc_usb_tm_det-gpio = <&tlmm 46 0x00>;
+		};
+	};
+};

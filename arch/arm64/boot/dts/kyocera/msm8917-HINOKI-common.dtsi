@@ -1,0 +1,27 @@
+/*
+ * This software is contributed or developed by KYOCERA Corporation.
+ * (C) 2019 KYOCERA Corporation
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+#include "./module/keys/msm8917-HINOKI-keys.dtsi"
+#include "./module/pm/regulator/msm8917-HINOKI-common-regulator.dtsi"
+#include "./module/flashdriver/emmc/msm8917-HINOKI-common-emmc.dtsi"
+#include "./module/flashdriver/sd/msm8917-HINOKI-common-sd.dtsi"
+#include "./module/pm/charger/msm8937-HINOKI-common-charger.dtsi"
+#include "./module/pm/fg/msm8937-HINOKI-common-fg.dtsi"
+#include "./module/pm/hkadc/msm8917-HINOKI-common-hkadc.dtsi"
+#include "./module/pm/pmic/msm8917-HINOKI-common-pmic.dtsi"
+#include "./module/camera/msm8917-HINOKI-camera.dtsi"
+#include "./module/camera/msm8917-HINOKI-camera-pinctrl.dtsi"
+#include "./module/camera/msm8917-HINOKI-camera-sensor-mtp.dtsi"
+#include "./module/audio/msm8917-HINOKI-common-audio.dtsi"
+#include "./module/thermal/msm8917-HINOKI-common-thermal.dtsi"

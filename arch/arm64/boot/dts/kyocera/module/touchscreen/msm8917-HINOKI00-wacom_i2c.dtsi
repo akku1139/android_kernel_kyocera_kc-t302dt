@@ -1,0 +1,230 @@
+/*
+ * This software is contributed or developed by KYOCERA Corporation.
+ * (C) 2018 KYOCERA Corporation
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+&i2c_2 { /* BLSP1 QUP2 */
+	digiz@09 {
+		compatible = "wacom,emr";
+		reg = <0x09>;
+		interrupt-parent = <&tlmm>;
+		interrupts = <1 0x0>;
+		wacom,fwe-gpio   = <&tlmm 0 0x00>;
+		wacom,rst-gpio   = <&tlmm 2 0x00>;
+		wacom,pdctb-gpio = <&tlmm 85 0x00>;
+		wacom,irq-gpio   = <&tlmm 1 0x00>;
+		wacom,ldo-gpio   = <&tlmm 19 0x00>;
+		/* pins used by touchscreen */
+		pinctrl-names = "pmx_digi_active","pmx_digi_suspend";
+		pinctrl-0 = <&dgt_i2cirq_n_active  &dgt_reset_active &dgt_fwe_n_active &dgt_pdct_n_active &dgt_ldo_n_active>;
+		pinctrl-1 = <&dgt_i2cirq_n_suspend &dgt_reset_suspend &dgt_fwe_n_suspend &dgt_pdct_n_suspend &dgt_ldo_n_suspend>;
+	};
+};
+
+&soc{
+/delete-node/ i2c_5;
+};
+
+&tlmm {
+/delete-node/ blsp1_uart1;
+/delete-node/ i2c_5;
+/delete-node/ pri_mi2s_sck;
+
+	dgt_fwe_n {
+		dgt_fwe_n_default: dgt_fwe_n_default{
+			mux {
+				pins = "gpio0";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio0";
+				drive-strength = <2>;
+				bias-disable;
+				output-low;
+			};
+		};
+		dgt_fwe_n_active: dgt_fwe_n_active {
+			mux {
+				pins = "gpio0";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio0";
+				drive-strength = <2>;
+				bias-disable;
+				output-low;
+			};
+		};
+		dgt_fwe_n_suspend: dgt_fwe_n_suspend {
+			mux {
+				pins = "gpio0";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio0";
+				drive-strength = <2>;
+				bias-disable;
+				output-low;
+			};
+		};
+	};
+
+	dgt_reset {
+		dgt_reset_default: dgt_reset_default {
+			mux {
+				pins = "gpio2";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio2";
+				drive-strength = <2>;
+				bias-disable;
+				output-low;
+			};
+		};
+		dgt_reset_active: dgt_reset_active {
+			mux {
+				pins = "gpio2";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio2";
+				drive-strength = <2>;
+				bias-disable;
+				output-low;
+			};
+		};
+		dgt_reset_suspend: dgt_reset_suspend {
+			mux {
+				pins = "gpio2";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio2";
+				drive-strength = <2>;
+				bias-disable;
+				output-low;
+			};
+		};
+	};
+
+	dgt_pdct_n {
+		dgt_pdct_n_default: dgt_pdct_n_default {
+			mux {
+				pins = "gpio85";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio85";
+				drive-strength = <2>;
+				bias-disable;
+			};
+		};
+		dgt_pdct_n_active: dgt_pdct_n_active {
+			mux {
+				pins = "gpio85";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio85";
+				drive-strength = <2>;
+				bias-disable;
+			};
+		};
+		dgt_pdct_n_suspend: dgt_pdct_n_suspend {
+			mux {
+				pins = "gpio85";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio85";
+				drive-strength = <2>;
+				bias-disable;
+			};
+		};
+	};
+
+	dgt_i2cirq_n {
+		dgt_i2cirq_n_default: dgt_i2cirq_n_default {
+			mux {
+				pins = "gpio1";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio1";
+				drive-strength = <2>;
+				bias-disable;
+			};
+		};
+		dgt_i2cirq_n_active: dgt_i2cirq_n_active {
+			mux {
+				pins = "gpio1";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio1";
+				drive-strength = <2>;
+				bias-disable;
+			};
+		};
+		dgt_i2cirq_n_suspend: dgt_i2cirq_n_suspend {
+			mux {
+				pins = "gpio1";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio1";
+				drive-strength = <2>;
+				bias-disable;
+			};
+		};
+	};
+
+	dgt_ldo_n {
+		dgt_ldo_n_default: dgt_ldo_n_default {
+			mux {
+				pins = "gpio19";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio19";
+				drive-strength = <2>;
+				bias-disable;
+				output-low;
+			};
+		};
+		dgt_ldo_n_active: dgt_ldo_n_active {
+			mux {
+				pins = "gpio19";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio19";
+				drive-strength = <2>;
+				bias-disable;
+				output-low;
+			};
+		};
+		dgt_ldo_n_suspend: dgt_ldo_n_suspend {
+			mux {
+				pins = "gpio19";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio19";
+				drive-strength = <2>;
+				bias-disable;
+				output-low;
+			};
+		};
+	};
+};

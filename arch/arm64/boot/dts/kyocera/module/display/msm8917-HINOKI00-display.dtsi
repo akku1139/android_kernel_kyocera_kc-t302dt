@@ -1,0 +1,258 @@
+/*
+ * This software is contributed or developed by KYOCERA Corporation.
+ * (C) 2019 KYOCERA Corporation
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+#include <dt-bindings/clock/msm-clocks-8952.h>
+#include "msm8917-mdss.dtsi"
+#include "msm8917-mdss-pll.dtsi"
+#include "msm8917-mtp.dtsi"
+
+#include "dsi-panel-kc-boe-wxga-video.dtsi"
+
+&mdss_dsi0 {
+        qcom,dsi-pref-prim-pan = <&dsi_kc_boe_wxga_vid>;
+		qcom,regulator-ldo-mode;
+
+		pinctrl-names = "lcd_id_active", "lcd_id_suspend";
+		pinctrl-0 = <&lcd_id1_active &lcd_id2_active>;
+		pinctrl-1 = <&lcd_id1_suspend &lcd_id2_suspend>;
+
+		vdda-supply = <&pm8937_l2>;
+		vddio-supply = <&pm8937_l6>;
+
+		qcom,platform-reset-gpio = <&tlmm 32 0>;
+        kc,vlcdio_18-en-gpio = <&tlmm 89 0>;
+        kc,vddlcd-32-en-gpio = <&tlmm 133 0>;
+        kc,lcd-id1-gpio = <&tlmm 33 0>;
+        kc,lcd-id2-gpio = <&tlmm 127 0>;
+
+		kc,lp00-delay-us = <60000>;
+		kc,dsi-off-rst-delay-us = <3000>;
+};
+
+&dsi_kc_boe_wxga_vid {
+        qcom,cont-splash-enabled;
+};
+
+&tlmm {
+	vddlcd_32_en {
+		vddlcd_32_en_default: vddlcd_32_en_default {
+			mux {
+				pins = "gpio133";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio133";
+				drive-strength = <2>;
+				bias-disable;
+				output-low;
+			};
+		};
+		vddlcd_32_en_active: vddlcd_32_en_active {
+			mux {
+				pins = "gpio133";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio133";
+				drive-strength = <2>;
+				bias-disable;
+				output-low;
+			};
+		};
+		vddlcd_32_en_suspend: vddlcd_32_en_suspend {
+			mux {
+				pins = "gpio133";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio133";
+				drive-strength = <2>;
+				bias-disable;
+				output-low;
+			};
+		};
+	};
+
+	lcd_rst_n {
+		lcd_rst_n_default: lcd_rst_n_default {
+			mux {
+				pins = "gpio32";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio32";
+				drive-strength = <2>;
+				bias-disable;
+				output-low;
+			};
+		};
+		lcd_rst_n_active: lcd_rst_n_active {
+			mux {
+				pins = "gpio32";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio32";
+				drive-strength = <2>;
+				bias-disable;
+				output-low;
+			};
+		};
+		lcd_rst_n_suspend: lcd_rst_n_suspend {
+			mux {
+				pins = "gpio32";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio32";
+				drive-strength = <2>;
+				bias-disable;
+				output-low;
+			};
+		};
+	};
+
+	vlcdio_18_en {
+		vlcdio_18_en_default: vlcdio_18_en_default {
+			mux {
+				pins = "gpio89";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio89";
+				drive-strength = <2>;
+				bias-disable;
+				output-low;
+			};
+		};
+		vlcdio_18_en_active: vlcdio_18_en_active {
+			mux {
+				pins = "gpio89";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio89";
+				drive-strength = <2>;
+				bias-disable;
+				output-low;
+			};
+		};
+		vlcdio_18_en_suspend: vlcdio_18_en_suspend {
+			mux {
+				pins = "gpio89";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio89";
+				drive-strength = <2>;
+				bias-disable;
+				output-low;
+			};
+		};
+	};
+
+	lcd_id1 {
+		lcd_id1_default: lcd_id1_default {
+			mux {
+				pins = "gpio33";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio33";
+				drive-strength = <2>;
+				input-debounce = <0>;
+				bias-pull-up;
+			};
+		};
+		lcd_id1_active: lcd_id1_active {
+			mux {
+				pins = "gpio33";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio33";
+				drive-strength = <2>;
+				input-debounce = <0>;
+				bias-pull-up;
+			};
+		};
+		lcd_id1_suspend: lcd_id1_suspend {
+			mux {
+				pins = "gpio33";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio33";
+				drive-strength = <2>;
+				input-debounce = <0>;
+				bias-pull-down;
+			};
+		};
+	};
+
+	lcd_id2 {
+		lcd_id2_default: lcd_id2_default {
+			mux {
+				pins = "gpio127";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio127";
+				drive-strength = <2>;
+				input-debounce = <0>;
+				bias-pull-up;
+			};
+		};
+		lcd_id2_active: lcd_id2_active {
+			mux {
+				pins = "gpio127";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio127";
+				drive-strength = <2>;
+				input-debounce = <0>;
+				bias-pull-up;
+			};
+		};
+		lcd_id2_suspend: lcd_id2_suspend {
+			mux {
+				pins = "gpio127";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio127";
+				drive-strength = <2>;
+				input-debounce = <0>;
+				bias-pull-down;
+			};
+		};
+	};
+
+	lcd_te {
+		lcd_te_default: lcd_te_default {
+			mux {
+				pins = "gpio24";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio24";
+				drive-strength = <2>;
+				input-debounce = <0>;
+				bias-pull-down;
+			};
+		};
+	};
+
+};

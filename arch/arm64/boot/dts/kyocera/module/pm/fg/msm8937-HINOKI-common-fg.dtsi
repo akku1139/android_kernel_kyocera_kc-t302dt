@@ -1,0 +1,46 @@
+/*
+ * This software is contributed or developed by KYOCERA Corporation.
+ * (C) 2019 KYOCERA Corporation
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+&qpnp_fg {
+	qcom,cold-hot-jeita-hysteresis = <30 20>;
+	oem,cool-warm-jeita-hysteresis = <30 20>;
+	qcom,hold-soc-while-full;
+	qcom,capacity-learning-feedback;
+	qcom,cl-max-increment-deciperc = <5>;
+	qcom,cl-max-decrement-deciperc = <5>;
+	qcom,cl-max-temp-decidegc = <400>;
+	qcom,cl-min-temp-decidegc = <100>;
+	qcom,cl-max-start-capacity = <40>;
+	qcom,vbat-estimate-diff-mv = <150>;
+	qcom,fg-control-slope-limiter;
+	qcom,fg-slope-limit-temp-threshold = <5>;
+	qcom,fg-slope-limit-low-temp-chg = <45>;
+	qcom,fg-slope-limit-high-temp-chg = <3>;
+	qcom,fg-slope-limit-low-temp-dischg = <45>;
+	qcom,fg-slope-limit-high-temp-dischg = <3>;
+	qcom,fg-delta-soc = <1>;
+	qcom,warm-bat-decidegc = <420>;
+	qcom,cool-bat-decidegc = <120>;
+	qcom,hot-bat-decidegc = <500>;
+	qcom,cold-bat-decidegc = <20>;
+	qcom,thermal-coefficients = [b7 85 b2 49 71 35];
+	qcom,fg-cutoff-voltage-mv = <3400>;
+	qcom,fg-cc-cv-threshold-mv = <4190>;
+	qcom,fg-iterm-ma = <300>;
+	qcom,fg-chg-iterm-ma = <300>;
+	oem,jeita-chg-iterm-ma = <200>;
+	qcom,cycle-counter-en;
+	oem,jeita-cc-cv-comp-mv = <110>;
+	qcom,resume-soc = <95>;
+};

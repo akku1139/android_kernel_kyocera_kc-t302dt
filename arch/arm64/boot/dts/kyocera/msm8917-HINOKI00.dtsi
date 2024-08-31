@@ -1,0 +1,49 @@
+/*
+ * This software is contributed or developed by KYOCERA Corporation.
+ * (C) 2019 KYOCERA Corporation
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+#include "./module/i2c/msm8917-HINOKI00-i2c.dtsi"
+#include "./module/touchscreen/msm8917-HINOKI00-cyttsp5.dtsi"
+#include "./module/display/msm8917-HINOKI00-display.dtsi"
+#include "./module/sensors/msm8917-HINOKI00-sensors.dtsi"
+#include "./module/flashdriver/emmc/msm8917-HINOKI00-emmc.dtsi"
+#include "./module/flashdriver/sd/msm8917-HINOKI00-sd.dtsi"
+#include "./module/lights/msm8917-HINOKI00-lights.dtsi"
+#include "./module/audio/msm8917-HINOKI00-audio.dtsi"
+#include "./module/usb/msm8917-HINOKI00-usb.dtsi"
+#include "./module/bsp/ram/msm8917-HINOKI00-ram.dtsi"
+#include "./module/pm/pmic/msm8917-HINOKI00-pmic.dtsi"
+#include "./module/systemupdate/sdm429-HINOKI-common-systemupdate.dtsi"
+#include "./module/ext_img/msm8917-HINOKI00-ext-img.dtsi"
+
+&vendor {
+	mtp_batterydata: qcom,battery-data {
+		qcom,batt-id-range-pct = <15>;
+		#include "./module/pm/fg/msm8937-HINOKI-common-batterydata-6000mah.dtsi"
+	};
+
+	mtp_batterydata_half: qcom,battery-data-half {
+		qcom,batt-id-range-pct = <15>;
+		#include "./module/pm/fg/msm8937-HINOKI-common-batterydata-3000mah.dtsi"
+	};
+};
+
+&qpnp_fg {
+	qcom,battery-data = <&mtp_batterydata>;
+	qcom,battery-data-half = <&mtp_batterydata_half>;
+};
+
+&qpnp_smbcharger {
+	qcom,battery-data = <&mtp_batterydata>;
+	qcom,battery-data-half = <&mtp_batterydata_half>;
+};

@@ -1,0 +1,74 @@
+#
+# This software is contributed or developed by KYOCERA Corporation.
+# (C) 2015 KYOCERA Corporation
+# (C) 2016 KYOCERA Corporation
+# (C) 2019 KYOCERA Corporation
+#
+
+config INPUT_SENSOR_PROXIMITY
+	tristate "Proximity Sensor Driver"
+	default n
+	help
+		Support Proximity Sensor Driver.
+
+config INPUT_SENSOR_LIGHT
+	tristate "LIGHT SENSOR"
+	default y
+	help
+		Support Light Sensor Driver.
+
+config ROHM_RPR0521
+	tristate "Sensor Driver for ROHM RPR-0521RS"
+	depends on (INPUT_SENSOR_PROXIMITY || INPUT_SENSOR_LIGHT)
+	default y
+	help
+		Support Sensor Driver for ROHM RPR-0521RS.
+
+config INPUT_ALPS_INPUT
+        tristate "Input device driver for alps sensor"
+	default y
+
+config INPUT_HSCDTD
+        tristate "GeoMagneticField device driver for I2C"
+	default y
+
+config INPUT_SENSOR_ACCELEROMETER
+        tristate "Accelerometer device driver for I2C"
+	default y
+
+config INPUT_SENSOR_ACC_U2DH
+		tristate "Accelerometer device U2DH driver"
+	default y
+	help
+		This option enables U2DH Accelerometer Sensor driver.
+		U2DH is made by Invensence.
+
+config INPUT_SENSOR_ACC_MXC400XXC
+		tristate "Accelerometer device MXC400xXC driver"
+	default n
+	help
+		This option enables MXC400xXC Accelerometer Sensor driver.
+		MXC400xXC is made by MEMSIC.
+
+config KC_COLOR_VARIATION
+	tristate "Color Variation"
+	default n
+	help
+		Support Color Variation.
+
+config SENSOR_COMMON
+	tristate "Sensor Common"
+	default y
+
+config USE_MICON_SOFT_STRUCTURE
+	bool "USE_MICON_SOFT_STRUCTURE"
+	default n
+	help
+		Apply for Sensor Micon Structure
+
+config USE_KC_SNS_SENSORS_PERFORMANCE_MEASURE_LOG
+	bool "USE_KC_SNS_SENSORS_PERFORMANCE_MEASURE_LOG"
+	default n
+	help
+		Enable kc sensors debug log for performance measure
+

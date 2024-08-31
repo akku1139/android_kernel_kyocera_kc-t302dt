@@ -1,0 +1,74 @@
+/*
+ * This software is contributed or developed by KYOCERA Corporation.
+ * (C) 2019 KYOCERA Corporation
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+&i2c_4 { /* BLSP1 QUP4 */
+	u2dh@19 { /* Accelerometer sensor */
+		status = "disabled";
+		compatible = "u2dh";
+		reg = <0x19>;
+		acc-vdd-supply = <&pm8937_l5>;
+		acc-vdd-min-voltage = <1800000>;
+		acc-vdd-max-voltage = <1800000>;
+		acc-vdd-on-load-current = <200>;
+		acc-vdd-off-load-current = <1>;
+	};
+
+	mxc400xxc@15 {  /* Accelerometer sensor */
+		status = "disabled";
+		compatible = "mxc400xx";
+		reg = <0x15>;
+		acc-vdd-supply = <&pm8937_l5>;
+		pinctrl-names = "sns_power_default","sns_power_active","sns_power_suspend";
+		pinctrl-0 = <>;
+		pinctrl-1 = <>;
+		pinctrl-2 = <>;
+		sensor_18_on_wait-time-us = <1000>;
+		//is-regulator-ope-available;
+		//acc-vdd-min-voltage = <1800000>;
+		//acc-vdd-max-voltage = <1800000>;
+		//acc-vdd-on-load-current = <200>;
+		//acc-vdd-off-load-current = <1>;
+	};
+
+	hscdtd007a@c { /* Geomagnetic sensor */
+		status = "disabled";
+		compatible = "hscdtd007a";
+		reg = <0xC>;
+		mag-vdd-supply = <&pm8937_l5>;
+		mag-vdd-min-voltage = <1800000>;
+		mag-vdd-max-voltage = <1800000>;
+		mag-vdd-on-load-current = <3000>;
+		mag-vdd-off-load-current = <10>;
+	};
+
+	rpr0521@38 { /* Ambient light and proximity sensor */
+		status = "disabled";
+		compatible = "rpr0521_i2c";
+		reg = <0x38>;
+		pinctrl-names = "default","active","suspend";
+		pinctrl-0 = <>;
+		pinctrl-1 = <>;
+		pinctrl-2 = <>;
+		rpr0521,psals-power-offon-interval-ms = <10>;
+		rpr0521,psals-power-on-wait-ms = <5>;
+		rpr0521,psals-power-normal-wait-ms = <1>;
+		psals-vcc-supply = <&pm8937_l10>;
+		//psals-vcc-min-voltage = <3000000>;
+		//psals-vcc-max-voltage = <3000000>;
+		psals-vcc-on-load-current = <5000>;
+		psals-vcc-off-load-current = <300>;
+	};
+
+};
+

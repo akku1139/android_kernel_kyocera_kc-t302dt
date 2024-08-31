@@ -1,0 +1,19 @@
+# This software is contributed or developed by KYOCERA Corporation.
+# (C) 2019 KYOCERA Corporation
+#
+
+config OEM_HKADC
+	tristate "OEM HKADC support"
+	default y
+
+config OEM_HKADC_USB_TM
+	tristate "OEM USB Temperature Monitor support"
+	default y
+
+config OEM_HKADC_USB_TM_DET
+	tristate "OEM USB Temperature Detector support"
+	default y
+
+config OEM_BMS
+	tristate "OEM BMS support"
+	default y

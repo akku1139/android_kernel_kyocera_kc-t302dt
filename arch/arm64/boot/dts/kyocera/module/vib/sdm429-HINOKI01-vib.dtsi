@@ -1,0 +1,72 @@
+/*
+ * This software is contributed or developed by KYOCERA Corporation.
+ * (C) 2019 KYOCERA Corporation
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+&i2c_2 {
+	status="okay";
+	aw8695_haptic@5A {
+	    compatible = "awinic,aw8695_haptic";
+	    reg = <0x5A>;
+	    reset-gpio = <&tlmm 8 0>;
+	    irq-gpio = <&tlmm 12 0>;
+	    pinctrl-names = "hap_on", "hap_off";
+	    pinctrl-0 = <&haptic_trip_on>;
+	    pinctrl-1 = <&haptic_trip_off>;
+	    status = "okay";
+	};
+};
+
+&i2c_2_sleep {
+	/* suspended state */
+	mux {
+		pins = "gpio6", "gpio7";
+		function = "gpio";
+	};
+
+	config {
+		pins = "gpio6", "gpio7";
+		drive-strength = <2>;
+		bias-disable;
+		output-high;
+	};
+};
+
+&tlmm {
+	/* haptic trip */
+	haptic_trip {
+		haptic_trip_on: haptic_trip_on {
+			mux {
+				pins = "gpio94","gpio95","gpio96";
+				function = "gpio";
+			};
+
+			config {
+				pins = "gpio94","gpio95","gpio96";
+				drive-strength = <2>; /* 2 MA */
+				output-low;
+			};
+		};
+		haptic_trip_off: haptic_trip_off {
+			mux {
+				pins = "gpio94","gpio95","gpio96";
+				function = "gpio";
+			};
+
+			config {
+				pins = "gpio94","gpio95","gpio96";
+				drive-strength = <2>; /* 2 MA */
+				output-low;
+			};
+		};
+	};
+};

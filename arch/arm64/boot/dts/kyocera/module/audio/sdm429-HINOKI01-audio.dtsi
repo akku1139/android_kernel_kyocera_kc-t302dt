@@ -1,0 +1,68 @@
+/*
+ * This software is contributed or developed by KYOCERA Corporation.
+ * (C) 2019 KYOCERA Corporation
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+&int_codec {
+	qcom,msm-mbhc-hphl-swh = <1>;
+	qcom,msm-mbhc-gnd-swh = <1>;
+	qcom,msm-hs-micbias-type = "internal";
+	qcom,msm-micbias1-ext-cap;
+	/delete-property/ qcom,msm-micbias2-ext-cap;
+	kc,btn-low-th  = /bits/ 16 <100 212 487 487 487>;
+	kc,btn-high-th = /bits/ 16 <100 225 500 500 500>;
+
+	qcom,audio-routing =
+			"RX_BIAS", "MCLK",
+			"SPK_RX_BIAS", "MCLK",
+			"INT_LDO_H", "MCLK",
+			"RX_I2S_CLK", "MCLK",
+			"TX_I2S_CLK", "MCLK",
+			"MIC BIAS External", "Handset Mic",
+			"MIC BIAS Internal2", "Headset Mic",
+			"MIC BIAS External", "Secondary Mic",
+			"AMIC1", "MIC BIAS External",
+			"AMIC2", "MIC BIAS Internal2",
+			"AMIC3", "MIC BIAS External",
+			"ADC1_IN", "ADC1_OUT",
+			"ADC2_IN", "ADC2_OUT",
+			"ADC3_IN", "ADC3_OUT",
+			"PDM_IN_RX1", "PDM_OUT_RX1",
+			"PDM_IN_RX2", "PDM_OUT_RX2",
+			"PDM_IN_RX3", "PDM_OUT_RX3";
+
+	/delete-property/ qcom,cdc-us-euro-gpios;
+	/delete-property/ qcom,cdc-us-eu-gpios;
+	/delete-property/ qcom,quin-mi2s-gpios;
+
+	/delete-property/ asoc-wsa-codec-names;
+	/delete-property/ asoc-wsa-codec-prefixes;
+	/delete-property/ msm-vdd-wsa-switch-supply;
+	/delete-property/ qcom,msm-vdd-wsa-switch-voltage;
+	/delete-property/ qcom,msm-vdd-wsa-switch-current;
+
+
+	/delete-property/ msm-vdd-wsa-switch-supply;
+	/delete-property/ qcom,msm-vdd-wsa-switch-voltage;
+	/delete-property/ qcom,msm-vdd-wsa-switch-current;
+	};
+
+&soc {
+	cdc_us_euro_sw: msm_cdc_pinctrl_us_euro_sw {
+		status = "disabled";
+	};
+
+	i2c@78b6000 {
+		status = "disabled";
+	};
+
+};

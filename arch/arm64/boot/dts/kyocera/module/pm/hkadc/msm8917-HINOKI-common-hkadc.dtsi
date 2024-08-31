@@ -1,0 +1,138 @@
+/*
+ * This software is contributed or developed by KYOCERA Corporation.
+ * (C) 2019 KYOCERA Corporation
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+&pm8937_vadc {
+	hkadc_ldo-supply = <&pm8937_l16>;
+
+	chan@32 {
+		label = "xo_therm";
+		reg = <0x32>;
+		qcom,decimation = <0>;
+		qcom,pre-div-channel-scaling = <0>;
+		qcom,calibration-type = "ratiometric";
+		qcom,scale-function = <4>;
+		qcom,hw-settle-time = <2>;
+		qcom,fast-avg-setup = <0>;
+		qcom,vadc-thermal-node;
+	};
+
+	chan@13 {
+		label = "usb_therm";
+		reg = <0x13>;
+		qcom,decimation = <0>;
+		qcom,pre-div-channel-scaling = <0>;
+		qcom,calibration-type = "ratiometric";
+		qcom,scale-function = <15>;
+		qcom,hw-settle-time = <2>;
+		qcom,fast-avg-setup = <0>;
+		qcom,vadc-thermal-node;
+	};
+};
+
+&pmi8950_vadc {
+	pinctrl-names = "default";
+	pinctrl-0 = <&camera_therm_default>;
+	hkadc_ldo-supply = <&pm8937_l16>;
+
+	chan@10 {
+		label = "camera_therm";
+		reg = <0x10>;
+		qcom,decimation = <0>;
+		qcom,pre-div-channel-scaling = <0>;
+		qcom,calibration-type = "ratiometric";
+		qcom,scale-function = <15>;
+		qcom,hw-settle-time = <2>;
+		qcom,fast-avg-setup = <0>;
+		qcom,vadc-thermal-node;
+	};
+};
+
+&pmi8950_mpps {
+	camera_therm {
+		camera_therm_default: camera_therm_default {
+			pins = "mpp1";
+			function = "analog";
+			input-enable;
+			qcom,amux-route = <0>;
+		};
+	};
+};
+
+&thermal_zones {
+	xo-therm-adc {
+		polling-delay-passive = <0>;
+		polling-delay = <5000>;
+		thermal-sensors = <&pm8937_vadc 0x32>;
+		thermal-governor = "user_space";
+
+		trips {
+			active-config0 {
+				temperature = <65000>;
+				hysteresis = <1000>;
+				type = "passive";
+			};
+		};
+	};
+
+	usb-therm-adc {
+		polling-delay-passive = <0>;
+		polling-delay = <5000>;
+		thermal-sensors = <&pm8937_vadc 0x13>;
+		thermal-governor = "user_space";
+
+		trips {
+			active-config0 {
+				temperature = <65000>;
+				hysteresis = <1000>;
+				type = "passive";
+			};
+		};
+	};
+
+	camera-therm-adc {
+		polling-delay-passive = <0>;
+		polling-delay = <5000>;
+		thermal-sensors = <&pmi8950_vadc 0x10>;
+		thermal-governor = "user_space";
+
+		trips {
+			active-config0 {
+				temperature = <65000>;
+				hysteresis = <1000>;
+				type = "passive";
+			};
+		};
+	};
+};
+
+&spmi_bus {
+	qcom,pm8937@0 {
+		oem_hkadc {
+			compatible = "oem_hkadc-driver";
+			qcom,oem-hkadc-vadc = <&pm8937_vadc>;
+			qcom,oem-pmi-hkadc-vadc = <&pmi8950_vadc>;
+			oem,monitor-time-ms = <5000>;
+			oem,resume-mon-time-ms = <1000>;
+			oem,out-camera-therm-diasble;
+			oem,in-camera-therm-diasble;
+			oem,pa-therm-diasble;
+			oem,lcd-therm-diasble;
+		};
+
+		oem_usb_tm_interrupt_monitor {
+			compatible = "kc,oem_hkadc_usb_tm-driver";
+			oem_usb_tm_wake-gpio = <&tlmm 62 0x00>;
+		};
+	};
+};
