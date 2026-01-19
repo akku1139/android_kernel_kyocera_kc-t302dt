@@ -18,6 +18,7 @@
 #include "msm8917-mtp.dtsi"
 
 #include "dsi-panel-kc-boe-wxga-video.dtsi"
+#include "dsi-panel-kc-boe-ilitek-wxga-video.dtsi"
 
 &mdss_dsi0 {
         qcom,dsi-pref-prim-pan = <&dsi_kc_boe_wxga_vid>;
@@ -41,6 +42,10 @@
 };
 
 &dsi_kc_boe_wxga_vid {
+        qcom,cont-splash-enabled;
+};
+
+&dsi_kc_boe_ilitek_wxga_vid {
         qcom,cont-splash-enabled;
 };
 

@@ -122,7 +122,8 @@ enum kdisp_touch_state {
 
 /* kdisp_connect_target */
 #define PANEL_NOT_TEST				0
-#define PANEL_FOUND					1
+#define PANEL_FOUND1					1
+#define PANEL_FOUND2					2
 #define PANEL_NOT_FOUND				-1
 
 /*==================================================================*/

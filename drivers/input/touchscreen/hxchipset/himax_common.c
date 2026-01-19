@@ -293,12 +293,17 @@ static ssize_t himax_HSEN_write(struct file *file, const char *buff,
 	struct himax_ts_data *ts = private_ts;
 	char buf[80] = {0};
 
+	I("%s: enter \n", __func__);
+	mutex_lock(&ts->suspend_lock);
+
 	if (len >= 80) {
 		I("%s: no command exceeds 80 chars.\n", __func__);
+		mutex_unlock(&ts->suspend_lock);
 		return -EFAULT;
 	}
 
 	if (copy_from_user(buf, buff, len)) {
+		mutex_unlock(&ts->suspend_lock);
 		return -EFAULT;
 	}
 
@@ -306,11 +311,18 @@ static ssize_t himax_HSEN_write(struct file *file, const char *buff,
 		ts->HSEN_enable = 0;
 	else if (buf[0] == '1')
 		ts->HSEN_enable = 1;
-	else
+	else {
+		mutex_unlock(&ts->suspend_lock);
 		return -EINVAL;
+	}
 
-	g_core_fp.fp_set_HSEN_enable(ts->HSEN_enable, ts->suspended);
-	I("%s: HSEN_enable = %d.\n", __func__, ts->HSEN_enable);
+	if (ts->suspended == false) {
+		g_core_fp.fp_set_HSEN_enable(ts->HSEN_enable, ts->suspended);
+		I("%s: HSEN_enable = %d.\n", __func__, ts->HSEN_enable);
+	}
+
+	I("%s: END \n", __func__);
+	mutex_unlock(&ts->suspend_lock);
 	return len;
 }
 
@@ -2346,6 +2358,9 @@ FW_force_upgrade:
 	ts->HSEN_enable = 0;
 #endif
 
+	I("%s: mutex_init \n", __func__);
+	mutex_init(&ts->suspend_lock);
+
 	/*touch data init*/
 	err = himax_report_data_init();
 
@@ -2494,8 +2509,12 @@ int himax_chip_common_suspend(struct himax_ts_data *ts)
 {
 	int ret;
 
+	I("%s: enter \n", __func__);
+	mutex_lock(&ts->suspend_lock);
+
 	if (ts->suspended) {
 		I("%s: Already suspended. Skipped. \n", __func__);
+		mutex_unlock(&ts->suspend_lock);
 		return 0;
 	} else {
 		ts->suspended = true;
@@ -2504,6 +2523,7 @@ int himax_chip_common_suspend(struct himax_ts_data *ts)
 
 	if (debug_data != NULL && debug_data->flash_dump_going == true) {
 		I("[himax] %s: Flash dump is going, reject suspend\n", __func__);
+		mutex_unlock(&ts->suspend_lock);
 		return 0;
 	}
 
@@ -2519,6 +2539,7 @@ int himax_chip_common_suspend(struct himax_ts_data *ts)
 		ts->pre_finger_mask = 0;
 		FAKE_POWER_KEY_SEND = false;
 		I("[himax] %s: SMART_WAKEUP enable, reject suspend\n", __func__);
+		mutex_unlock(&ts->suspend_lock);
 		return 0;
 	}
 
@@ -2546,6 +2567,8 @@ int himax_chip_common_suspend(struct himax_ts_data *ts)
 // keep LCD_LDO_IOVDD_1P8 when suspend to support easy wake.
 //	himax_vdd_enable(private_ts->lcd_tp_shared_3v3_en_gpio, 0);
 
+	mutex_unlock(&ts->suspend_lock);
+
 	I("%s: END \n", __func__);
 	return 0;
 }
@@ -2556,9 +2579,11 @@ int himax_chip_common_resume(struct himax_ts_data *ts)
 	int result = 0;
 #endif
 	I("%s: enter \n", __func__);
+	mutex_lock(&ts->suspend_lock);
 
 	if (ts->suspended == false) {
 		I("%s: It had entered resume, skip this step \n", __func__);
+		mutex_unlock(&ts->suspend_lock);
 		return 0;
 	} else {
 		ts->suspended = false;
@@ -2595,6 +2620,13 @@ int himax_chip_common_resume(struct himax_ts_data *ts)
 #if defined(HX_RST_PIN_FUNC) && defined(HX_RESUME_HW_RESET) && defined(HX_ZERO_FLASH)
 ESCAPE_0F_UPDATE:
 #endif
+
+#ifdef HX_HIGH_SENSE
+	g_core_fp.fp_set_HSEN_enable(ts->HSEN_enable, ts->suspended);
+	I("%s: HSEN_enable = %d.\n", __func__, ts->HSEN_enable);
+#endif
+
+	mutex_unlock(&ts->suspend_lock);
 	I("%s: END \n", __func__);
 	return 0;
 }

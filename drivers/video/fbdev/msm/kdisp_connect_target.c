@@ -62,13 +62,21 @@ static bool get_panel_online_status(void)
 		return true;
 }
 
-static int __init set_panel_detect(char *buf)
+static int __init set_panel_detect1(char *buf)
 {
-	panel_detect = PANEL_FOUND;
+	panel_detect = PANEL_FOUND1;
 	pr_info("%s: early_param_set! panel_detect=%d\n", __func__, panel_detect);
 	return 0;
 }
-early_param("panel_detect", set_panel_detect);
+early_param("panel_detect1", set_panel_detect1);
+
+static int __init set_panel_detect2(char *buf)
+{
+	panel_detect = PANEL_FOUND2;
+	pr_info("%s: early_param_set! panel_detect=%d\n", __func__, panel_detect);
+	return 0;
+}
+early_param("panel_detect2", set_panel_detect2);
 
 int get_panel_detect(void)
 {
@@ -153,58 +161,71 @@ static int kdisp_connect_parse_gpio_params(struct platform_device *pdev,
 
 static int kdisp_connect_check_panel_detect(struct kc_ctrl_info *kctrl_data)
 {
-	int det_check = -1;
-	int id1, id2 = PANEL_FOUND_GPIO_VALUE;
+	int id1[1], id2[1];
 	int i;
 	int pf_sstype;
 	pf_sstype = socinfo_get_platform_subtype();
 
+	id1[0] = PANEL_FOUND_GPIO_VALUE;
+	id1[1] = PANEL_FOUND_GPIO_VALUE;
+	id2[0] = PANEL_FOUND_GPIO_VALUE;
+	id2[1] = PANEL_FOUND_GPIO_VALUE;
+
 	if (kctrl_data == NULL) {
 		pr_err("%s: param error\n", __func__);
-		panel_detect_status = PANEL_FOUND;
+		panel_detect_status = PANEL_FOUND2;
 		return panel_detect_status;
 	}
 
 	if (!kctrl_data->panel_det_en) {
 		pr_err("%s: panel detect disable\n", __func__);
-		panel_detect_status = PANEL_FOUND;
+		panel_detect_status = PANEL_FOUND2;
 	} else {
 		if (panel_detect_status == PANEL_NOT_TEST) {
-			if (panel_detect == PANEL_FOUND) {
-				panel_detect_status = PANEL_FOUND;
-				pr_notice("%s: already panel found\n", __func__);
+			if (panel_detect == PANEL_FOUND1) {
+				panel_detect_status = PANEL_FOUND1;
+				pr_notice("%s: already panel1 found\n", __func__);
+			} else if (panel_detect == PANEL_FOUND2) {
+				panel_detect_status = PANEL_FOUND2;
+				pr_notice("%s: already panel2 found\n", __func__);
 			} else {
 				if(PF_SSTYPE_HINOKI01 == pf_sstype)
 				{
 					if(get_panel_online_status())
-						panel_detect_status = PANEL_FOUND;
+						panel_detect_status = PANEL_FOUND1;
 					else
 						panel_detect_status = PANEL_NOT_FOUND;
 				}
 				else
 				{
-					kdisp_connect_pinctrl_set_state(kctrl_data, 1);
-
 					for (i=0; i<PANEL_CHECK_RETRY_NUM; i++) {
+						kdisp_connect_pinctrl_set_state(kctrl_data, 1);
 						msleep(1);
-						id1 = gpio_get_value(kctrl_data->lcd_id1_gpio);
-						id2 = gpio_get_value(kctrl_data->lcd_id2_gpio);
-						if(id1 == PANEL_FOUND_GPIO_VALUE && id2 == PANEL_FOUND_GPIO_VALUE) {
-							det_check = PANEL_FOUND_GPIO_VALUE;
+						id1[0] = gpio_get_value(kctrl_data->lcd_id1_gpio);
+						id2[0] = gpio_get_value(kctrl_data->lcd_id2_gpio);
+
+						kdisp_connect_pinctrl_set_state(kctrl_data, 0);
+						msleep(1);
+						id1[1] = gpio_get_value(kctrl_data->lcd_id1_gpio);
+						id2[1] = gpio_get_value(kctrl_data->lcd_id2_gpio);
+
+						if (id1[0] == PANEL_FOUND_GPIO_VALUE && id2[0] == PANEL_FOUND_GPIO_VALUE && id1[1] == PANEL_FOUND_GPIO_VALUE && id2[1] == PANEL_FOUND_GPIO_VALUE) {
+							panel_detect_status = PANEL_FOUND1;
+							pr_notice("%s: panel1 found\n", __func__);
+							break;
+						} else if (id1[0] != PANEL_FOUND_GPIO_VALUE && id2[0] != PANEL_FOUND_GPIO_VALUE && id1[1] != PANEL_FOUND_GPIO_VALUE && id2[1] != PANEL_FOUND_GPIO_VALUE) {
+							panel_detect_status = PANEL_FOUND2;
+							pr_notice("%s: panel2 found\n", __func__);
+							kdisp_connect_pinctrl_set_state(kctrl_data, 1);
 							break;
 						}
 						pr_notice("%s: panel detect error. retry=%d\n", __func__, i);
 					}
 
-					if (det_check == PANEL_FOUND_GPIO_VALUE) {
-						panel_detect_status = PANEL_FOUND;
-						pr_notice("%s: panel found\n", __func__);
-					} else {
+					if (panel_detect_status == PANEL_NOT_TEST) {
 						panel_detect_status = PANEL_NOT_FOUND;
 						pr_notice("%s: panel not found\n", __func__);
 					}
-
-					kdisp_connect_pinctrl_set_state(kctrl_data, 0);
 				}
 			}
 		}
@@ -216,7 +237,7 @@ static int kdisp_connect_check_panel_detect(struct kc_ctrl_info *kctrl_data)
 static void kdisp_connect_notify_to_light(void)
 {
 #ifdef ENABLE_LCD_DETECTION
-	if (panel_detect_status == PANEL_FOUND) {
+	if ((panel_detect_status == PANEL_FOUND1) || (panel_detect_status == PANEL_FOUND2)) {
 		light_led_disp_set_panel(LIGHT_MAIN_WLED_LCD_EN, 0);
 		pr_notice("%s: notify found to led\n", __func__);
 	} else {
@@ -236,8 +257,10 @@ void kdisp_connect_update_panel_detect_status(void)
 	if (panel_detect_status_update == 1) {
 		if (panel_detect_active == PANEL_NOT_FOUND) {
 			panel_detect_status = PANEL_NOT_FOUND;
-		} else if (panel_detect_active == PANEL_FOUND) {
-			panel_detect_status = PANEL_FOUND;
+		} else if (panel_detect_active == PANEL_FOUND1) {
+			panel_detect_status = PANEL_FOUND1;
+		} else if (panel_detect_active == PANEL_FOUND2) {
+			panel_detect_status = PANEL_FOUND2;
 		}
 		panel_detect_status_update = 0;
 		pr_notice("%s: status update=%d panel_detect_active=%d\n",
@@ -266,7 +289,7 @@ void kdisp_connect_check_panel_active(struct mdss_dsi_ctrl_pdata *ctrl)
 		return;
 	}
 
-	if( (panel_detect_active != PANEL_NOT_TEST)||(panel_detect_status != PANEL_FOUND) ) {
+	if ((panel_detect_active != PANEL_NOT_TEST) || (panel_detect_status != PANEL_FOUND1) || (panel_detect_status != PANEL_FOUND2)) {
 		pr_debug("%s: skip active_check=%d panel_detect=%d\n",
 			__func__, panel_detect_active, panel_detect_status);
 		return;
@@ -293,8 +316,16 @@ void kdisp_connect_check_panel_active(struct mdss_dsi_ctrl_pdata *ctrl)
 		panel_detect_active = PANEL_NOT_FOUND;
 		pr_notice("%s: panel not active\n", __func__);
 	} else {
-		panel_detect_active = PANEL_FOUND;
-		pr_notice("%s: panel active\n", __func__);
+		if (panel_detect == PANEL_FOUND1) {
+			panel_detect_active = PANEL_FOUND1;
+			pr_notice("%s: panel active\n", __func__);
+		} else if (panel_detect == PANEL_FOUND2) {
+			panel_detect_active = PANEL_FOUND2;
+			pr_notice("%s: panel active\n", __func__);
+		} else {
+			panel_detect_active = PANEL_NOT_FOUND;
+			pr_notice("%s: panel not active\n", __func__);			
+		}
 	}
 
 	panel_detect_status_update = 1;
@@ -317,10 +348,22 @@ struct device_node *kdisp_connect_find_panel_of_node(struct platform_device *pde
 	
 	switch(pf_sstype) {
 		case PF_SSTYPE_HINOKI00 :
-			kpanel_node = of_find_node_by_name(mdss_node,
-					"qcom,mdss_dsi_kc_boe_wxga_video");
-			pr_notice("%s: PF_SSTYPE_HINOKI00\n", __func__);
-			break;
+			if (panel_detect == PANEL_FOUND1) {
+				kpanel_node = of_find_node_by_name(mdss_node,
+						"qcom,mdss_dsi_kc_boe_wxga_video");
+				pr_notice("%s: PF_SSTYPE_HINOKI00\n", __func__);
+				break;
+			} else if (panel_detect == PANEL_FOUND2) {
+				kpanel_node = of_find_node_by_name(mdss_node,
+						"qcom,mdss_dsi_kc_boe_ilitek_wxga_video");
+				pr_notice("%s: PF_SSTYPE_HINOKI00\n", __func__);
+				break;
+			} else {
+				kpanel_node = of_find_node_by_name(mdss_node,
+						"qcom,mdss_dsi_kc_boe_ilitek_wxga_video");
+				pr_notice("%s: PF_SSTYPE_HINOKI00\n", __func__);
+				break;
+			}
 		case PF_SSTYPE_HINOKI01 :
 			kpanel_node = of_find_node_by_name(mdss_node,
 					"qcom,mdss_dsi_kc_lce_hx83102b_video"); /* Provisional Setting */
