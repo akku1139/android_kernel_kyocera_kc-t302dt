@@ -158,7 +158,6 @@
 //};
 
 #include "dsi-panel-kc-boe-wxga-video.dtsi"
-#include "dsi-panel-kc-boe-ilitek-wxga-video.dtsi"
 
 &soc {
 	dsi_panel_pwr_supply: dsi_panel_pwr_supply {

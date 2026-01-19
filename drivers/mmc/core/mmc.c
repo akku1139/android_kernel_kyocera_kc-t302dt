@@ -1324,9 +1324,6 @@ static int mmc_select_hs400(struct mmc_card *card)
 	/* Switch card to HS400 */
 	val = EXT_CSD_TIMING_HS400 |
 	      card->drive_strength << EXT_CSD_DRV_STR_SHIFT;
-    if (card->cid.prod_name[4] == 0x42) {
-        val = EXT_CSD_TIMING_HS400 | 0x20;
-    }
 	err = __mmc_switch(card, EXT_CSD_CMD_SET_NORMAL,
 			   EXT_CSD_HS_TIMING, val,
 			   card->ext_csd.generic_cmd6_time,
@@ -1514,9 +1511,6 @@ static int mmc_select_hs400es(struct mmc_card *card)
 	/* Switch card to HS400 */
 	val = EXT_CSD_TIMING_HS400 |
 	      card->drive_strength << EXT_CSD_DRV_STR_SHIFT;
-    if (card->cid.prod_name[4] == 0x42) {
-        val = EXT_CSD_TIMING_HS400 | 0x20;
-    }
 	err = __mmc_switch(card, EXT_CSD_CMD_SET_NORMAL,
 			   EXT_CSD_HS_TIMING, val,
 			   card->ext_csd.generic_cmd6_time,
